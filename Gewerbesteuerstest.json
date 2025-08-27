@@ -1,0 +1,528 @@
+{
+  "template_info": {
+    "form_name": "Gewerbesteuererklärung",
+    "tax_year": 2024,
+    "form_version": "2024",
+    "elster_compatible": true
+  },
+  "sections": {
+    "section_5_einlagekonten": {
+      "title": "5 - Ermittlung des steuerlichen Einlagekontos",
+      "description": "Einlagekonten nach § 27 Absatz 2 Satz 1 KStG und Nennkapital nach § 28 Absatz 1 Satz 3 KStG",
+      "fields": {
+        "40": {
+          "label": "Bei Eintritt in die unbeschränkte Steuerpflicht - Bestand der nicht das Nennkapital geleisteten Einlagen",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["gesellschaftsvertrag", "gründungsunterlagen"],
+          "llm_extraction_prompt": "Extrahiere aus den Gründungsunterlagen den Bestand der nicht das Nennkapital geleisteten Einlagen bei Eintritt in die unbeschränkte Steuerpflicht. Falls nicht vorhanden, gib 0 zurück.",
+          "calculation_logic": null,
+          "legal_reference": "§ 27 Absatz 2 Satz 3 KStG"
+        },
+        "41": {
+          "label": "Bei Eintritt in die unbeschränkte Steuerpflicht - Bestand des Sonderausweises",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["sonderausweis", "steuerbescheide"],
+          "llm_extraction_prompt": "Extrahiere den Bestand des Sonderausweises nach § 28 Absatz 1 Satz 3 KStG zum Zeitpunkt des Eintritts in die unbeschränkte Steuerpflicht.",
+          "calculation_logic": null,
+          "legal_reference": "§ 28 Absatz 1 Satz 3 KStG"
+        },
+        "42": {
+          "label": "Bestand nach § 27 Absatz 2 Satz 1 KStG zum Schluss des vorangegangenen Wirtschaftsjahres",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["bilanz_vorjahr", "steuerbescheid_vorjahr"],
+          "llm_extraction_prompt": "Extrahiere aus der Bilanz oder dem Steuerbescheid des Vorjahres den Bestand nach § 27 Absatz 2 Satz 1 KStG zum Schluss des vorangegangenen Wirtschaftsjahres.",
+          "calculation_logic": null,
+          "legal_reference": "§ 27 Absatz 2 Satz 1 KStG"
+        },
+        "43": {
+          "label": "Bestand nach § 28 Absatz 1 Satz 3 KStG zum Schluss des vorangegangenen Wirtschaftsjahres",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["sonderausweis_vorjahr", "steuerbescheid_vorjahr"],
+          "llm_extraction_prompt": "Extrahiere den Bestand nach § 28 Absatz 1 Satz 3 KStG zum Schluss des vorangegangenen Wirtschaftsjahres aus dem Sonderausweis oder Steuerbescheid.",
+          "calculation_logic": null,
+          "legal_reference": "§ 28 Absatz 1 Satz 3 KStG"
+        },
+        "44": {
+          "label": "Mehraufführungen nach § 14 Absatz 4 Satz 2 KStG",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["gewinn_verlust_rechnung", "bilanz", "steuerliche_korrekturen"],
+          "llm_extraction_prompt": "Berechne die Mehraufführungen nach § 14 Absatz 4 Satz 2 KStG aus den steuerlichen Korrekturen und der Gewinn- und Verlustrechnung.",
+          "calculation_logic": null,
+          "legal_reference": "§ 14 Absatz 4 Satz 2 KStG"
+        },
+        "45": {
+          "label": "Mehraufführungen bei Körperschaft - Vermutete Körperschaft",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["gesellschaftsvertrag", "gewinn_verlust_rechnung"],
+          "llm_extraction_prompt": "Berechne Mehraufführungen bei vermuteter Körperschaft nach Zeile 295 der Anlage GK, falls die Körperschaft nicht Organträger oder Organgesellschaft ist.",
+          "calculation_logic": null,
+          "legal_reference": "Zeile 295 Anlage GK"
+        }
+      }
+    },
+    "section_6_gewinn_gewerbebetrieb": {
+      "title": "6 - Gewinn aus Gewerbebetrieb",
+      "description": "Ermittlung des Gewinns aus Gewerbebetrieb vor Anwendung des § 7 Satz 4 GewStG",
+      "fields": {
+        "39": {
+          "label": "Gewinn aus Gewerbebetrieb vor Anwendung des § 7 Satz 4 GewStG",
+          "field_type": "currency",
+          "required": true,
+          "validation": "required",
+          "document_sources": ["gewinn_verlust_rechnung", "bilanz", "einkommensteuererklaerung"],
+          "llm_extraction_prompt": "Extrahiere den Gewinn aus Gewerbebetrieb aus der Gewinn- und Verlustrechnung oder der Einkommensteuererklärung. Dies ist normalerweise der Jahresüberschuss/Gewinn ohne Berücksichtigung von § 7 Satz 4 GewStG (Zeilen 46 und 100 bis 102).",
+          "calculation_logic": null,
+          "legal_reference": "§ 7 Satz 4 GewStG"
+        },
+        "40": {
+          "label": "Steuerfreie Einnahmen nach § 3 Nummer 40 EStG",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["gewinn_verlust_rechnung", "belegsammlung"],
+          "llm_extraction_prompt": "Suche nach steuerfreien Einnahmen nach § 3 Nummer 40 EStG (vermindert um nichtabziehbare Beträge nach § 3c Absatz 2 EStG und § 8b KStG). Diese sind meist nicht in der normalen GuV ausgewiesen.",
+          "calculation_logic": null,
+          "legal_reference": "§ 3 Nr. 40 EStG, § 3c Abs. 2 EStG, § 8b KStG"
+        },
+        "41": {
+          "label": "Steuerfreie Erträge nach § 3 Nr. 40 InvStG",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["investmentfonds_bescheinigungen", "kapitalerträge"],
+          "llm_extraction_prompt": "Extrahiere steuerfreie Erträge aus Investmentfonds nach § 3 Nr. 40 und 44 InvStG. Suche nach entsprechenden Bescheinigungen oder Kapitalertragsnachweisen.",
+          "calculation_logic": null,
+          "legal_reference": "§ 3 Nr. 40, 44 InvStG"
+        },
+        "42": {
+          "label": "Gewerbebetrieb ist nach § 3 GewStG vollständig oder teilweise von der Gewerbesteuer befreit",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["bescheid_gewerbesteuerbefreiung", "gesellschaftsvertrag"],
+          "llm_extraction_prompt": "Prüfe, ob der Gewerbebetrieb nach § 3 GewStG vollständig oder teilweise von der Gewerbesteuer befreit ist (z.B. gemeinnützige Körperschaften). Extrahiere den entsprechenden Anteil.",
+          "calculation_logic": null,
+          "legal_reference": "§ 3 GewStG"
+        },
+        "43": {
+          "label": "Von der Gewerbesteuer befreiter Gewinn laut Zeile 39",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["steuerbefreiung_bescheid"],
+          "llm_extraction_prompt": "Falls eine teilweise Gewerbesteuerbefreiung vorliegt, extrahiere den von der Gewerbesteuer befreiten Anteil des Gewinns aus Zeile 39.",
+          "calculation_logic": "depends_on_field_42",
+          "legal_reference": "§ 3 GewStG"
+        },
+        "44": {
+          "label": "Von der Gewerbesteuer nach § 13 GewStDV befreiter Anteil am Gewinn",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["gewerbesteuer_bescheid", "steuerbefreiung"],
+          "llm_extraction_prompt": "Extrahiere den nach § 13 GewStDV von der Gewerbesteuer befreiten Anteil am Gewinn aus Gewerbebetrieb laut Zeile 39.",
+          "calculation_logic": null,
+          "legal_reference": "§ 13 GewStDV"
+        },
+        "45": {
+          "label": "Korrektur des Gewinns aufgrund Ersatzung von Aufwendungen",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["steuerliche_korrekturen", "belegsammlung"],
+          "llm_extraction_prompt": "Berechne Korrekturen des Gewinns aufgrund der Ersatzung von Aufwendungen, die in einem vorangegangenen Erhebungszeitraum der Hinzurechnung unterlegen haben (mit negativem Vorzeichen eintragen).",
+          "calculation_logic": null,
+          "legal_reference": "Hinzurechnungsvorschriften"
+        },
+        "46": {
+          "label": "Gewinn des wirtschaftlichen Geschäftsbetriebs nach § 15 Absatz 4 InvStG",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["investmentfonds_rechnung"],
+          "llm_extraction_prompt": "Extrahiere den Gewinn des wirtschaftlichen Geschäftsbetriebs nach § 15 Absatz 4 InvStG aus den Investmentfonds-Unterlagen.",
+          "calculation_logic": null,
+          "legal_reference": "§ 15 Abs. 4 InvStG"
+        },
+        "47": {
+          "label": "Abzug von Kapitalertragsteuer nach § 36a Absatz 1 Satz 3 EStG",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["kapitalertragsteuer_bescheinigungen"],
+          "llm_extraction_prompt": "Berechne den Abzug von Kapitalertragsteuer gemäß § 36a Absatz 1 Satz 3 EStG. Subtrahiere nicht anrechenbare Kapitalertragsteuer nach § 36a Absatz 1 Satz 3 EStG.",
+          "calculation_logic": null,
+          "legal_reference": "§ 36a Abs. 1 Satz 3 EStG"
+        },
+        "48": {
+          "label": "Anwendung des § 20 Absatz 5 InvStG - Gesamtbetrag Teilfreistellungen",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["investmentfonds_bescheinigungen"],
+          "llm_extraction_prompt": "Berechne den Gesamtbetrag der bei der Ermittlung des Gewinns aus Gewerbebetrieb vorgenommenen Teilfreistellungen aus unmittelbaren Beteiligungen nach §§ 18 bis 20 und 21 InvStG.",
+          "calculation_logic": null,
+          "legal_reference": "§ 20 Abs. 5 InvStG"
+        },
+        "48a": {
+          "label": "Anwendung des § 45 Absatz 2 InvStG - Korrekturbetrag",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["investmentfonds_bescheinigungen"],
+          "llm_extraction_prompt": "Berechne den Korrekturbetrag nach § 45 Absatz 2 InvStG für Körperschaften nach § 45 Absatz 2 InvStG.",
+          "calculation_logic": null,
+          "legal_reference": "§ 45 Abs. 2 InvStG"
+        },
+        "49": {
+          "label": "Anwendung des § 45 Absatz 1 InvStG - Korrekturbetrag",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["investmentfonds_bescheinigungen"],
+          "llm_extraction_prompt": "Berechne den Korrekturbetrag nach § 45 Absatz 1 Satz 1 InvStG für Körperschaften.",
+          "calculation_logic": null,
+          "legal_reference": "§ 45 Abs. 1 Satz 1 InvStG"
+        }
+      }
+    },
+    "section_7_hinzurechnungen": {
+      "title": "7 - Hinzurechnungen",
+      "description": "Hinzurechnungen nach § 8 GewStG",
+      "fields": {
+        "30": {
+          "label": "Entgelte für Schulden (§ 8 Nr. 1 Buchstabe a GewStG)",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["zinsbescheinigungen", "kreditverträge", "gewinn_verlust_rechnung"],
+          "llm_extraction_prompt": "Berechne 1/4 aller Entgelte für Schulden nach § 8 Nr. 1 Buchstabe a GewStG. Berücksichtige nur Schuldzinsen über dem Freibetrag von 100€. Suche in der GuV nach Zinsaufwendungen und multipliziere mit 0,25.",
+          "calculation_logic": "(schuldzinsen - 100) * 0.25 if schuldzinsen > 100 else 0",
+          "legal_reference": "§ 8 Nr. 1 Buchst. a GewStG"
+        },
+        "31": {
+          "label": "Renten und dauernde Lasten (§ 8 Nr. 1 Buchstabe b GewStG)",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["rentenverträge", "gewinn_verlust_rechnung"],
+          "llm_extraction_prompt": "Berechne 1/4 aller Renten und dauernden Lasten nach § 8 Nr. 1 Buchstabe b GewStG. Suche nach wiederkehrenden Zahlungen wie Renten oder Pensionen.",
+          "calculation_logic": "renten_dauernde_lasten * 0.25",
+          "legal_reference": "§ 8 Nr. 1 Buchst. b GewStG"
+        },
+        "32": {
+          "label": "Gewinnminderung der ersten Gebrauchshaftung (§ 8 Nr. 1 Buchstabe c GewStG)",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["abschreibungen", "anlagevermögen"],
+          "llm_extraction_prompt": "Berechne 1/4 der Gewinnminderung der ersten Gebrauchshaftung nach § 8 Nr. 1 Buchstabe c GewStG. Betrifft meist unentgeltlich erworbenes Anlagevermögen.",
+          "calculation_logic": "gewinnminderung_gebrauchshaftung * 0.25",
+          "legal_reference": "§ 8 Nr. 1 Buchst. c GewStG"
+        },
+        "33": {
+          "label": "Miet- und Pachtausgaben bewegliche Leasinggüter (§ 8 Nr. 1 Buchstabe d GewStG)",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["leasingverträge", "mietverträge"],
+          "llm_extraction_prompt": "Berechne 1/4 der Miet- und Pachtausgaben für bewegliche Leasinggüter bei Beträgen fremder bewegter Betriebsmittel nach § 8 Nr. 1 Buchstabe d GewStG. Nur bei Leasingverträgen mit Kaufoption.",
+          "calculation_logic": "leasing_beweglich * 0.25 if kaufoption else 0",
+          "legal_reference": "§ 8 Nr. 1 Buchst. d GewStG"
+        },
+        "34": {
+          "label": "Miet- und Pachtausgaben Elektrofahrzeuge (§ 8 Nr. 1 Buchstabe d GewStG)",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["leasingverträge_elektro", "fahrzeugverträge"],
+          "llm_extraction_prompt": "Berechne 1/4 der Miet- und Pachtausgaben für Elektrofahrzeuge und Hybridelektrofahrzeuge nach § 8 Nr. 1 Buchstabe d Satz 2 GewStG. Gilt für Fahrzeuge die den 31.12.2030 abgeschlossen wurden.",
+          "calculation_logic": "leasing_elektro * 0.25",
+          "legal_reference": "§ 8 Nr. 1 Buchst. d Satz 2 GewStG"
+        },
+        "35": {
+          "label": "Miet- und Pachtausgaben fremde unbeweglicher Kontrollvermögen (§ 8 Nr. 1 Buchstabe e GewStG)",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["mietverträge_immobilien", "pachtverträge"],
+          "llm_extraction_prompt": "Berechne 1/4 der Miet- und Pachtausgaben für die Berührung fremder unbeweglicher Kontrollfunktions- und Kontrollvermögen nach § 8 Nr. 1 Buchstabe e GewStG.",
+          "calculation_logic": "miete_unbewegliche * 0.25",
+          "legal_reference": "§ 8 Nr. 1 Buchst. e GewStG"
+        },
+        "36": {
+          "label": "Aufwendungen für bestimmte Überlassung von Rechten (§ 8 Nr. 1 Buchstabe f GewStG)",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["lizenzverträge", "patentverträge"],
+          "llm_extraction_prompt": "Berechne 1/4 der Aufwendungen für die zeitlich befristete Überlassung von Rechten, insbesondere Konzessionen und Lizenzen nach § 8 Nr. 1 Buchstabe f GewStG.",
+          "calculation_logic": "lizenz_aufwendungen * 0.25",
+          "legal_reference": "§ 8 Nr. 1 Buchst. f GewStG"
+        },
+        "37": {
+          "label": "Vergütungen bei einmaligen Vorgängen (§ 8 Nr. 1 Buchstabe g GewStG)",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["beratungsverträge", "einmalige_vergütungen"],
+          "llm_extraction_prompt": "Berechne 1/4 der Vergütungen bei einmaligen Vorgängen in Sinne des § 8 Nr. 1 Buchstabe g nach § 3 Absatz 1 Nummer 3 EStG-DurchführungsV soweit sich Sinn eines jährlichen Betrages ergibt.",
+          "calculation_logic": "einmalige_vergütungen * 0.25",
+          "legal_reference": "§ 8 Nr. 1 Buchst. g GewStG"
+        }
+      }
+    },
+    "section_7b_hinzurechnungen_zweites_jahr": {
+      "title": "7b - Hinzurechnungen für ein zweites, im Erhebungszeitraum endendes Wirtschaftsjahr",
+      "description": "Finanzierungsanteil nach § 8 GewStG für zweites Jahr (ohne Kürzung um Zeilen 79 und 80)",
+      "fields": {
+        "38": {
+          "label": "Entgelte für Schulden (§ 8 Nr. 1 Buchstabe a GewStG) - Zweites Jahr",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["zinsbescheinigungen_zweites_jahr", "gewinn_verlust_rechnung_zweites_jahr"],
+          "llm_extraction_prompt": "Berechne 1/4 aller Entgelte für Schulden nach § 8 Nr. 1 Buchstabe a GewStG für das zweite Wirtschaftsjahr. Nur relevant wenn zwei Wirtschaftsjahre im Erhebungszeitraum enden.",
+          "calculation_logic": "(schuldzinsen_jahr2 - 100) * 0.25 if schuldzinsen_jahr2 > 100 else 0",
+          "legal_reference": "§ 8 Nr. 1 Buchst. a GewStG"
+        }
+      }
+    },
+    "section_8_hinzurechnung_nummer_4": {
+      "title": "8 - Hinzurechnung nach § 8 Nummer 4 GewStG",
+      "description": "Hinzurechnung bei Kommanditgesellschaft auf Aktien",
+      "fields": {
+        "46": {
+          "label": "Anteil bei Kommanditgesellschaft auf Aktien - Gewinne aus Anteilen",
+          "field_type": "percentage",
+          "required": false,
+          "validation": "min:0,max:100",
+          "document_sources": ["gesellschaftsvertrag", "gewinnverteilung"],
+          "llm_extraction_prompt": "Bei einer Kommanditgesellschaft auf Aktien: Extrahiere den Anteil am Gewinn bestimmter Körperschaften. Eingabe als Prozentsatz ohne Prozentzeichen.",
+          "calculation_logic": null,
+          "legal_reference": "§ 8 Nr. 4 GewStG"
+        }
+      }
+    },
+    "section_8_verlust_anteile": {
+      "title": "8 - Anteile am Verlust aus in- und/oder ausländischen Personengesellschaften",
+      "description": "Verlustanteile nach § 8 Nummer 8 GewStG",
+      "fields": {
+        "404": {
+          "label": "Summe der Anteile am Verlust aus in- und ausländischen Personengesellschaften",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["personengesellschaft_verluste", "gewinnverteilung"],
+          "llm_extraction_prompt": "Summiere alle Anteile am Verlust aus in- und ausländischen Personengesellschaften nach § 8 Nummer 8 GewStG. Berücksichtige nur Verluste ohne Minuszeichen.",
+          "calculation_logic": "sum(verluste_personengesellschaften)",
+          "legal_reference": "§ 8 Nr. 8 GewStG"
+        }
+      }
+    },
+    "section_8_hinzurechnung_10_12": {
+      "title": "8 - Hinzurechnung nach § 8 Nummer 10 bis 12 GewStG",
+      "description": "Spezielle Hinzurechnungen für bestimmte Gewinnermittlungsarten",
+      "fields": {
+        "408": {
+          "label": "Ausschüttungen und abschreibungsbedingte Gewinnminderungen bei Betriebsstätte",
+          "field_type": "currency",
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["betriebsstätte_rechnung", "ausschüttungen"],
+          "llm_extraction_prompt": "Berechne Ausschüttungen und abschreibungsbedingte Gewinnminderungen bei Betriebsstätte nach § 8 Nummer 10 GewStG durch Abzug der Gewinnermittlung nach ohne Ausländsteuer von Lizenzgebühren.",
+          "calculation_logic": null,
+          "legal_reference": "§ 8 Nr. 10 GewStG"
+        },
+        "409": {
+          "label": "Ausländische Steuern soweit auf Gewinne bezogene Gewinnsteuern entstehen",
+          "field_type": "currency", 
+          "required": false,
+          "validation": "min:0",
+          "document_sources": ["ausländische_steuern", "steuer_bescheinigungen"],
+          "llm_extraction_prompt": "Extrahiere ausländische Steuern soweit auf Gewinne bezogene Gewinnsteuern nach § 8 Nummer 12 GewStG entstehen, die nach § 3 Nummer 12 GewStG steuerfrei gestellt oder nach DBA unterliegend sind.",
+          "calculation_logic": null,
+          "legal_reference": "§ 8 Nr. 12 GewStG"
+        }
+      }
+    }
+  },
+  "document_categories": {
+    "gewinn_verlust_rechnung": {
+      "description": "Gewinn- und Verlustrechnung des Wirtschaftsjahres",
+      "file_types": ["pdf", "xlsx", "csv"],
+      "required": true,
+      "extraction_priority": "high"
+    },
+    "bilanz": {
+      "description": "Bilanz zum Stichtag",
+      "file_types": ["pdf", "xlsx"],
+      "required": true,
+      "extraction_priority": "high"
+    },
+    "zinsbescheinigungen": {
+      "description": "Bescheinigungen über Schuldzinsen und Entgelte",
+      "file_types": ["pdf", "jpg", "png"],
+      "required": false,
+      "extraction_priority": "medium"
+    },
+    "leasingverträge": {
+      "description": "Leasing- und Mietverträge für bewegliche Güter",
+      "file_types": ["pdf"],
+      "required": false,
+      "extraction_priority": "medium"
+    },
+    "gesellschaftsvertrag": {
+      "description": "Gesellschaftsvertrag und Gründungsunterlagen",
+      "file_types": ["pdf"],
+      "required": false,
+      "extraction_priority": "low"
+    },
+    "steuerbescheide": {
+      "description": "Vorjahres-Steuerbescheide und -erklärungen",
+      "file_types": ["pdf"],
+      "required": false,
+      "extraction_priority": "medium"
+    }
+  },
+  "validation_rules": {
+    "cross_field_validations": [
+      {
+        "rule_id": "gewinn_consistency",
+        "description": "Gewinn aus Zeile 39 muss mit GuV übereinstimmen",
+        "fields": ["39"],
+        "validation_type": "consistency_check"
+      },
+      {
+        "rule_id": "hinzurechnung_minimum",
+        "description": "Hinzurechnungen nur bei Beträgen über Freibetrag",
+        "fields": ["30", "31", "32", "33", "34", "35", "36", "37"],
+        "validation_type": "threshold_check"
+      }
+    ]
+  },
+  "export_formats": {
+    "elster_compatible": {
+      "format": "structured_text",
+      "field_mapping": "elster_line_numbers",
+      "validation": "required"
+    },
+    "csv_export": {
+      "format": "csv",
+      "columns": ["elster_line", "field_name", "value", "source_document"],
+      "delimiter": ";"
+    },
+    "pdf_export": {
+      "format": "pdf_form",
+      "template": "official_elster_form",
+      "fill_method": "overlay"
+    }
+  },
+  "llm_processing_instructions": {
+    "general_guidelines": [
+      "Extrahiere nur numerische Werte ohne Währungszeichen",
+      "Bei Unsicherheit gib 0 zurück und markiere als 'needs_review'",
+      "Beachte steuerliche Freibeträge und Mindestbeträge",
+      "Unterscheide zwischen Brutto- und Nettobeträgen",
+      "Berücksichtige Vorzeichen (positive/negative Beträge)"
+    ],
+    "document_analysis_prompts": {
+      "gewinn_verlust_rechnung": "Analysiere die Gewinn- und Verlustrechnung systematisch. Identifiziere: 1) Jahresüberschuss/Jahresfehlbetrag, 2) Zinsaufwendungen, 3) Abschreibungen, 4) außergewöhnliche Aufwendungen, 5) steuerfreie Erträge. Gib alle Beträge in Euro ohne Währungszeichen aus.",
+      "bilanz": "Analysiere die Bilanz zum Stichtag. Extrahiere: 1) Eigenkapital, 2) Verbindlichkeiten, 3) Anlagevermögen, 4) Umlaufvermögen. Achte auf Vorjahresvergleichswerte.",
+      "zinsbescheinigungen": "Extrahiere aus Zinsbescheinigungen: 1) Gesamtbetrag der Schuldzinsen, 2) Zeitraum der Zinsbelastung, 3) Art des Kredits/Darlehens. Summiere alle Zinsen des Wirtschaftsjahres.",
+      "leasingverträge": "Analysiere Leasingverträge auf: 1) Gesamte Leasingraten des Jahres, 2) Art der Leasinggüter (beweglich/unbeweglich), 3) Vorhandensein einer Kaufoption, 4) Laufzeit des Vertrags."
+    },
+    "calculation_instructions": {
+      "hinzurechnung_formula": "Für Hinzurechnungen nach § 8 GewStG: Berechne 1/4 (25%) des jeweiligen Aufwands. Formel: aufwand * 0.25",
+      "freibetrag_schuldzinsen": "Schuldzinsen-Freibetrag: 100 Euro jährlich. Nur Beträge über 100 Euro sind hinzurechnungspflichtig.",
+      "percentage_fields": "Bei Prozentangaben: Gib nur die Zahl ohne %-Zeichen aus (z.B. 25 für 25%)"
+    }
+  },
+  
+  "quality_assurance": {
+    "plausibility_checks": [
+      {
+        "check_id": "gewinn_range",
+        "description": "Gewinn sollte in realistischem Bereich liegen",
+        "field": "39",
+        "min_threshold": -1000000,
+        "max_threshold": 50000000,
+        "warning_message": "Gewinn außerhalb des erwarteten Bereichs"
+      },
+      {
+        "check_id": "hinzurechnung_proportion",
+        "description": "Hinzurechnungen sollten nicht unverhältnismäßig zum Gewinn sein",
+        "fields": ["30", "31", "32", "33", "34", "35", "36", "37"],
+        "max_proportion": 0.5,
+        "warning_message": "Hinzurechnungen erscheinen unverhältnismäßig hoch"
+      }
+    ],
+    "completeness_checks": [
+      {
+        "required_documents": ["gewinn_verlust_rechnung", "bilanz"],
+        "warning_level": "error"
+      },
+      {
+        "recommended_documents": ["zinsbescheinigungen", "leasingverträge"],
+        "warning_level": "warning"
+      }
+    ]
+  },
+  "error_handling": {
+    "missing_documents": {
+      "action": "mark_field_as_incomplete",
+      "fallback_value": 0,
+      "requires_manual_review": true
+    },
+    "extraction_failures": {
+      "action": "flag_for_human_review",
+      "confidence_threshold": 0.7,
+      "retry_with_different_prompt": true
+    },
+    "calculation_errors": {
+      "action": "log_error_and_skip",
+      "notification": "admin",
+      "manual_override_allowed": true
+    }
+  },
+  "integration_endpoints": {
+    "google_sheets": {
+      "template_sheet_id": "TEMPLATE_SHEET_ID",
+      "ranges": {
+        "field_definitions": "Template_Fields!A:F",
+        "document_mapping": "Document_Categories!A:E",
+        "validation_rules": "Validation!A:D"
+      }
+    },
+    "openai_api": {
+      "model": "gpt-4",
+      "max_tokens": 2000,
+      "temperature": 0.1,
+      "system_prompt": "Du bist ein Experte für deutsche Steuergesetze und Gewerbesteuererklärungen. Extrahiere präzise numerische Werte aus den Dokumenten."
+    }
+  },
+  "version_control": {
+    "template_version": "1.0",
+    "last_updated": "2024-12-19",
+    "elster_form_version": "2024",
+    "changelog": [
+      {
+        "version": "1.0",
+        "date": "2024-12-19",
+        "changes": "Initial template creation based on Elster Gewerbesteuererklärung 2024"
+      }
+    ]
+  }
+}
